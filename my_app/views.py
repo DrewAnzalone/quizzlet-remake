@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic.edit import CreateView
 from .models import Card
 
 def find_index(arr, call):
@@ -6,6 +7,10 @@ def find_index(arr, call):
         if call(obj):
             return idx
     return -1
+
+class CardCreate(CreateView):
+    model = Card
+    fields = '__all__'
 
 def home(request):
     return render(request, 'home.html')
