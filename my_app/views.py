@@ -3,6 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Card
 
 def find_index(arr, call):
@@ -11,7 +13,7 @@ def find_index(arr, call):
             return idx
     return -1
 
-class CardCreate(CreateView):
+class CardCreate(LoginRequiredMixin, CreateView):
     model = Card
     fields = ['hint', 'answer']
     
@@ -19,11 +21,11 @@ class CardCreate(CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-class CardUpdate(UpdateView):
+class CardUpdate(LoginRequiredMixin, UpdateView):
     model = Card
     fields = ['hint', 'answer']
 
-class CardDelete(DeleteView):
+class CardDelete(LoginRequiredMixin, DeleteView):
     model = Card
     success_url = '/cards/'
 
@@ -34,22 +36,22 @@ class Home(LoginView):
 def about(request):
     return render(request, 'about.html')
 
+@login_required
 def card_index(request):
-    cards = Card.objects.order_by('id')
+    cards = Card.objects.filter(user=request.user).order_by('id')
     return render(request, 'cards/index.html', {"cards": cards})
 
+@login_required
 def card_detail(request, card_id):
     neighbors = [None, None]
     cards = Card.objects.order_by('id')
     idx = find_index(cards, lambda x: x.id == card_id)
 
     # TODO fix assuming valid id
-    if idx == 0 and len(cards) > 1:
-        neighbors[1] = cards[1].id
-    elif idx == len(cards)-1 and len(cards) > 1:
-        neighbors[0] = cards[idx-1].id
-    elif len(cards) > 2:
-        neighbors = [cards[idx-1].id, cards[idx+1].id]
+    if idx > 0:
+        neighbors[0] = cards[idx - 1].id
+    if idx < len(cards) - 1:
+        neighbors[1] = cards[idx + 1].id
     
     return render(request, 'cards/detail.html', {'card': cards[idx], 'prev': neighbors[0], 'next': neighbors[1]})
 
