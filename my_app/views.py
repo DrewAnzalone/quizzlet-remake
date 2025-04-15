@@ -1,5 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.views import LoginView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 from .models import Card
 
 def find_index(arr, call):
@@ -10,7 +13,11 @@ def find_index(arr, call):
 
 class CardCreate(CreateView):
     model = Card
-    fields = '__all__'
+    fields = ['hint', 'answer']
+    
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 class CardUpdate(UpdateView):
     model = Card
@@ -21,8 +28,8 @@ class CardDelete(DeleteView):
     success_url = '/cards/'
 
 
-def home(request):
-    return render(request, 'home.html')
+class Home(LoginView):
+    template_name = 'home.html'
 
 def about(request):
     return render(request, 'about.html')
@@ -45,3 +52,28 @@ def card_detail(request, card_id):
         neighbors = [cards[idx-1].id, cards[idx+1].id]
     
     return render(request, 'cards/detail.html', {'card': cards[idx], 'prev': neighbors[0], 'next': neighbors[1]})
+
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        # This is how to create a 'user' form object
+        # that includes the data from the browser
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            # This will add the user to the database
+            user = form.save()
+            # This is how we log a user in
+            login(request, user)
+            return redirect('card-index')
+        else:
+            error_message = 'Invalid sign up - try again'
+    # A bad POST or a GET request, so render signup.html with an empty form
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'signup.html', context)
+    # Same as: 
+    # return render(
+    #     request, 
+    #     'signup.html',
+    #     {'form': form, 'error_message': error_message}
+    # )
