@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Card
 
 def find_index(arr, call):
@@ -12,6 +12,15 @@ class CardCreate(CreateView):
     model = Card
     fields = '__all__'
 
+class CardUpdate(UpdateView):
+    model = Card
+    fields = ['hint', 'answer']
+
+class CardDelete(DeleteView):
+    model = Card
+    success_url = '/cards/'
+
+
 def home(request):
     return render(request, 'home.html')
 
@@ -22,7 +31,7 @@ def card_index(request):
     cards = Card.objects.order_by('id')
     return render(request, 'cards/index.html', {"cards": cards})
 
-def card_view(request, card_id):
+def card_detail(request, card_id):
     neighbors = [None, None]
     cards = Card.objects.order_by('id')
     idx = find_index(cards, lambda x: x.id == card_id)

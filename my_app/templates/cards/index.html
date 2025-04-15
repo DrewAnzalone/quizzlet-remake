@@ -8,7 +8,7 @@
 
 <section class="card-container">
   {% for card in cards %}
-  <a href="{% url 'card-view' card.id %}">
+  <a href="{% url 'card-detail' card.id %}">
     <div class="card">
       <h2>
         {{ card.hint }}

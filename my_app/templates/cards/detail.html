@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 {% if not prev is None %}
-<a href="{% url 'card-view' prev %}">Prev</a>
+<a href="{% url 'card-detail' prev %}">Prev</a>
 {% endif %}
 <div class="card">
   <div class="hint">
@@ -15,7 +15,11 @@
     {{ card.answer }}
   </div>
 </div>
+<div class="card-actions">
+  <a href="{% url 'card-update' card.id %}" class="btn warn">Edit</a>
+  <a href="{% url 'card-delete' card.id %}" class="btn danger">Delete</a>
+</div>
 {% if not next is None %}
-<a href="{% url 'card-view' next %}">Next</a>
+<a href="{% url 'card-detail' next %}">Next</a>
 {% endif %}
 {% endblock %}

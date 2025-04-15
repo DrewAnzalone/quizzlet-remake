@@ -6,8 +6,13 @@
 {% block content %}
 
 <div class="page-header">
-  <h1>Add a study card</h1>
+  {% if card %}
+    <h1>Edit Study Card</h1>
+  {% else %}
+    <h1>Add a Study Card</h1>
+  {% endif %}
 </div>
+
 
 <form action="" method="post" class="form-container">
   {% csrf_token %}
