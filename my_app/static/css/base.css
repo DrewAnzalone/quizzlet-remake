@@ -99,8 +99,18 @@ nav li {
 
 .header-logo-container {
     margin: auto;
-    padding: 10px 20px 0;
-    max-width: 500px;
+    /* padding: 10px 20px 0; */
+    /* max-width: 500px; */
+    min-width: 350px;
+}
+
+.header-logo-container a {
+    display: flex;
+    text-decoration: none;
+}
+
+.header-logo-container h2 {
+    margin: 0;
 }
 
 .page-header {

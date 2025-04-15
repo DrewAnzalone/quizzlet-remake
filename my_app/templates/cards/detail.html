@@ -4,22 +4,31 @@
 <link rel="stylesheet" href="{% static 'css/cards/card-detail.css' %}" />
 {% endblock %}
 {% block content %}
-{% if not prev is None %}
-<a href="{% url 'card-detail' prev %}">Prev</a>
+<div class="card-nav">
+  {% if not prev is None %}
+<a class="nav-links" href="{% url 'card-detail' prev %}">Prev</a>
 {% endif %}
-<div class="card">
-  <div class="hint">
-    {{ card.hint }}
+<div class="card" onclick="toggleCard(this)">
+  <div class="card-inner">
+    <div class="hint">
+      {{ card.hint }}
+    </div>
+    <div class="answer">
+      {{ card.answer }}
+    </div>
   </div>
-  <div class="answer">
-    {{ card.answer }}
-  </div>
+</div>
+{% if not next is None %}
+<a class="nav-links" href="{% url 'card-detail' next %}">Next</a>
+{% endif %}
 </div>
 <div class="card-actions">
   <a href="{% url 'card-update' card.id %}" class="btn warn">Edit</a>
   <a href="{% url 'card-delete' card.id %}" class="btn danger">Delete</a>
 </div>
-{% if not next is None %}
-<a href="{% url 'card-detail' next %}">Next</a>
-{% endif %}
+<script>
+  function toggleCard(cardElement) {
+    cardElement.querySelector('.card-inner').classList.toggle('flipped');
+  }
+</script>
 {% endblock %}
