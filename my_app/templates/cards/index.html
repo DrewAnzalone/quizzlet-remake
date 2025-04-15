@@ -1,8 +1,5 @@
 {% extends 'base.html' %} {% load static %} {% block head %}
-<link
-  rel="stylesheet"
-  href="{% static 'css/cards/card-index.css' %}"
-/>
+<link rel="stylesheet" href="{% static 'css/cards/card-index.css' %}" />
 {% endblock %} {% block content %}
 
 <section class="page-header">
@@ -11,9 +8,13 @@
 
 <section class="card-container">
   {% for card in cards %}
-  <div class="card">
-      <h2>{{ card.hint }}</h2>
-  </div>
+  <a href="{% url 'card-view' card.id %}">
+    <div class="card">
+      <h2>
+        {{ card.hint }}
+      </h2>
+    </div>
+  </a>
   {% endfor %}
 </section>
 
