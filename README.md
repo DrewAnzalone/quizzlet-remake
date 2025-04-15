@@ -1,7 +1,7 @@
 # Quizzlet Remake
 I chose to make a stripped down version of Quizzlet because for project 1, someone made memory match and animated their cards flipping. I wanted to make something that had action like that, while still staying manageable to create amidst low motivation.
 
-![All cards index page](my_app\static\images\homePage.png)
+![All cards index page](my_app/static/images/homePage.png)
 
 ## Getting started
 You can find the [deployed site here](https://quizzlet-remake-0f553a9e2662.herokuapp.com/)
